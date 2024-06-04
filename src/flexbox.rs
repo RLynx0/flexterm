@@ -63,28 +63,6 @@ impl Flexbox {
     pub fn take(&mut self) -> Self {
         std::mem::take(self)
     }
-
-    fn base_size(&self) -> Size {
-        let flow_size = match self.justify_content {
-            ContentSpacing::Stretch => SizeComponent::Stretch { min: 0 },
-            _ => SizeComponent::Fixed(0),
-        };
-        let counter_size = match self.align_content {
-            ContentSpacing::Stretch => SizeComponent::Stretch { min: 0 },
-            _ => SizeComponent::Fixed(0),
-        };
-
-        match self.orientation {
-            Orientation::Vertical => Size {
-                height: flow_size,
-                width: counter_size,
-            },
-            Orientation::Horizontal => Size {
-                height: counter_size,
-                width: flow_size,
-            },
-        }
-    }
 }
 
 impl Default for Flexbox {
@@ -100,23 +78,19 @@ impl Default for Flexbox {
 
 impl Flex for Flexbox {
     fn size(&self) -> Size {
-        let base = self.base_size();
-        let fold_flow = |a: SizeComponent, b: SizeComponent| a.add(&b);
-        let fold_counter = |a: SizeComponent, b: SizeComponent| a.max(&b);
-
         Size {
             height: self.content.iter().map(|c| c.size().height).fold(
-                base.height,
+                SizeComponent::Stretch { min: 0 },
                 match self.orientation {
-                    Orientation::Vertical => fold_flow,
-                    Orientation::Horizontal => fold_counter,
+                    Orientation::Vertical => add_size,
+                    Orientation::Horizontal => max_size,
                 },
             ),
             width: self.content.iter().map(|c| c.size().width).fold(
-                base.width,
+                SizeComponent::Stretch { min: 0 },
                 match self.orientation {
-                    Orientation::Vertical => fold_counter,
-                    Orientation::Horizontal => fold_flow,
+                    Orientation::Vertical => max_size,
+                    Orientation::Horizontal => add_size,
                 },
             ),
         }
@@ -124,5 +98,17 @@ impl Flex for Flexbox {
 
     fn render(&self, available_height: usize, available_width: usize) -> String {
         todo!()
+    }
+}
+
+fn add_size(current: SizeComponent, conetent: SizeComponent) -> SizeComponent {
+    SizeComponent::Stretch {
+        min: current.min().saturating_add(conetent.min()),
+    }
+}
+
+fn max_size(current: SizeComponent, conetent: SizeComponent) -> SizeComponent {
+    SizeComponent::Stretch {
+        min: current.min().max(conetent.min()),
     }
 }
