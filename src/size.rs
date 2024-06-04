@@ -1,10 +1,10 @@
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Size {
     pub height: SizeComponent,
     pub width: SizeComponent,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum SizeComponent {
     Fixed(usize),
     Stretch { min: usize },

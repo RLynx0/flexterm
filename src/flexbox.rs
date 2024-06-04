@@ -1,5 +1,8 @@
 use crate::{Flex, Size, SizeComponent};
 
+#[cfg(test)]
+mod tests;
+
 #[derive(Clone, Debug, Default)]
 pub enum Orientation {
     #[default]
