@@ -33,6 +33,18 @@ where
     }
 }
 
+#[derive(Clone, Debug)]
+pub struct Buffer(pub Size);
+impl Flex for Buffer {
+    fn size(&self) -> Size {
+        self.0.to_owned()
+    }
+
+    fn render(&self, _: usize, _: usize) -> String {
+        String::new()
+    }
+}
+
 pub struct HorizontalBar(pub char);
 impl Flex for HorizontalBar {
     fn size(&self) -> Size {

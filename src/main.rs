@@ -1,4 +1,4 @@
-use flexterm::{Flex, Flexbox, HorizontalBar, VerticalBar};
+use flexterm::{Buffer, Flex, Flexbox, HorizontalBar, Size, SizeComponent, VerticalBar};
 
 fn main() {
     let cont = Flexbox::vertical()
@@ -22,9 +22,15 @@ fn main() {
 
 fn titlecard(input: &str) -> Flexbox {
     let content = Flexbox::horizontal()
-        .add_item(VerticalBar(' '))
+        .add_item(Buffer(Size {
+            height: SizeComponent::Stretch { min: 0 },
+            width: SizeComponent::Fixed(1),
+        }))
         .add_item(input.to_string())
-        .add_item(VerticalBar(' '))
+        .add_item(Buffer(Size {
+            height: SizeComponent::Stretch { min: 0 },
+            width: SizeComponent::Fixed(1),
+        }))
         .add_item(VerticalBar('│'))
         .take();
 
