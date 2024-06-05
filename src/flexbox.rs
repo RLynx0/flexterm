@@ -10,19 +10,29 @@ pub enum Flow {
     Horizontal,
 }
 
+/// Controls how elements are layed out inside a Flexbox,
+/// if there is more space available than required.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub enum ContentAlign {
+    /// Align elements at the start of the Flexbox
     #[default]
     Start,
+    /// Align elements in the middle of the Flexbox
     Center,
+    /// Align elements at the end of the Flexbox
     End,
 }
 
+/// Controls how additional space is distributed
+/// to the elements of a Flexbox
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub enum ContentSpacing {
+    /// Distribute space inbetween elements
     #[default]
     Between,
+    /// Distribute space to the left and right of each element
     Around,
+    /// Distribute space inbetween and around elements
     Even,
 }
 
@@ -59,27 +69,68 @@ impl Default for ContentJustify {
 
 /// A container for an arbitrary amount of elements that implement Flex.
 ///
-/// # Flex-Size
+/// # Behaviour
 /// Flexbox will always take up as much space as it is given.
-/// If it has more space than it's items need, they are rendered depending
+/// If it has more space than its items need, they are rendered depending
 /// on the fields `justify_content` and `align_content`.
 ///
 /// `justify_content` refers to how elements are layed out parallel
-/// to the Flexbox's orientation.
+/// to the flow of the Flexbox.
 /// - `Align(Start)` : at the top for vertical flow, at the left for horizontal flow
 /// - `Align(End)` : at the bottom for vertical flow, at the right for horizontal flow
-/// - `Align(Center)` : in the middle of the flexbox
+/// - `Align(Center)` : in the middle of the Flexbox
 /// - `Space(Between)` : Distribute leftover space inbetween elements
 /// - `Space(Around)` : Distribute leftover space to the left and right of each element
 /// - `Space(Even)` : Distribute leftover space inbetween and around elements
 ///
 /// `align_content` refers to how elements are layed out perpendicular
-/// to the Flexbox's orientation.
+/// to the flow of the the Flexbox.
 /// - `Start` : at the left for vertical flow, at the top for horizontal flow
 /// - `End` : at the right for vertical flow, at the bottom for horizontal flow
-/// - `Center` : in the middle of the flexbox
+/// - `Center` : in the middle of the Flexbox
 ///
-/// For more information see `ContentSpacing`
+/// # Examples
+/// ```
+/// // use flexterm::{Flex, Flexbox, ContentAlign};
+/// //
+/// // let flexbox = Flexbox::vertical()
+/// //     .add_item("A string")
+/// //     .add_item("Another string")
+/// //     .take();
+/// //
+/// // let render_result = String::from(
+/// //     "A string      \n\
+/// //      Another string"
+/// // );
+/// //
+/// // assert_eq!(render_result, flexbox.render_minimal());
+/// //
+/// // let flexbox = Flexbox::vertical()
+/// //     .align_content(ContentAlign::End)
+/// //     .add_item("A string")
+/// //     .add_item("Another string")
+/// //     .take();
+/// //
+/// // let render_result = String::from(
+/// //     "      A string\n\
+/// //      Another string"
+/// // );
+/// //
+/// // assert_eq!(render_result, flexbox.render_minimal());
+/// //
+/// // let flexbox = Flexbox::vertical()
+/// //     .align_content(ContentAlign::Center)
+/// //     .add_item("A string")
+/// //     .add_item("Another string")
+/// //     .take();
+/// //
+/// // let render_result = String::from(
+/// //     "  A string    \n\
+/// //      Another string"
+/// // );
+/// //
+/// // assert_eq!(render_result, flexbox.render_minimal());
+/// ```
 pub struct Flexbox {
     flow: Flow,
     align_content: ContentAlign,
