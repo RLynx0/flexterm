@@ -131,6 +131,7 @@ impl Default for ContentJustify {
 /// //
 /// // assert_eq!(render_result, flexbox.render_minimal());
 /// ```
+#[derive(Default)]
 pub struct Flexbox {
     flow: Flow,
     align_content: ContentAlign,
@@ -174,17 +175,6 @@ impl Flexbox {
 
     pub fn take(&mut self) -> Self {
         std::mem::take(self)
-    }
-}
-
-impl Default for Flexbox {
-    fn default() -> Self {
-        Flexbox {
-            flow: Flow::default(),
-            align_content: ContentAlign::default(),
-            justify_content: ContentJustify::default(),
-            content: Vec::default(),
-        }
     }
 }
 
